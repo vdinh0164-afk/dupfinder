@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+# ^ This tells pip what tool to use to build/install this project.
+# "setuptools" is the classic, most widely-used build backend for Python
+# packages — when you run `pip install .`, pip reads this section first
+# to know which library to hand the job to.
+
+[project]
+name = "dupfinder"
+version = "0.1.0"
+# NOTE: this duplicates the __version__ string in src/dupfinder/__init__.py.
+# Keeping two copies in sync by hand is a known wrinkle in basic Python
+# packaging — there are ways to make pyproject.toml read the version
+# straight from __init__.py automatically, but that's an extra layer of
+# complexity we can add later if you want. For now: bump both by hand.
+description = "Find duplicate files by content, from the command line"
+requires-python = ">=3.10"
+
+[project.scripts]
+dupfinder = "dupfinder.cli:main"
+# ^ This is the single most important line in this file. It tells pip:
+# "after installing this package, create a command called `dupfinder`
+# that, when run, calls the main() function inside src/dupfinder/cli.py."
+# This is what turns `python -m dupfinder.cli` into just `dupfinder`.
+
+[tool.setuptools.packages.find]
+where = ["src"]
+# ^ Tells setuptools "the actual package code lives inside src/, not in
+# the project root" — this is the piece that makes the src/ layout work
+# with packaging specifically (separate from the PYTHONPATH trick we used
+# for testing before this file existed).
